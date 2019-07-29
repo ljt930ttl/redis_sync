@@ -9,12 +9,12 @@
 # @Function:
 
 class RedisOperatorBase(object):
-    def __init__(self):
-
+    def __init__(self,_rconn):
+        self._rconn =_rconn
         pass
-    def get_type(self,_rconn, key):
-        return _rconn.type(key)
-    def scan(self, _rconn, curs=0):
+    def get_type(self, key):
+        return self._rconn.type(key)
+    def scan(self, curs=0):
         """
 
         :param _rconn: redis conn object
@@ -23,33 +23,33 @@ class RedisOperatorBase(object):
         keys = list()
         # curs = 0
         while True:
-            curs, values = _rconn.scan(cursor=curs, count=10000)
+            curs, values = self._rconn.scan(cursor=curs, count=10000)
             keys = keys + values
             if curs == 0:
                 break
         return keys
-    def hscan(self, _rconn, key, curs=0, count=None):
+    def hscan(self, key, curs=0, count=None):
         fieldvalue_d = dict()
 
         while True:
-            curs, _fieldvalue_d = _rconn.hscan(key, cursor=curs, count=count)
+            curs, _fieldvalue_d = self._rconn.hscan(key, cursor=curs, count=count)
             fieldvalue_d.update(_fieldvalue_d)
             if curs == 0:
                 break
 
         return fieldvalue_d
-    def zscan(self, _rconn, key, curs=0, count=None):
+    def zscan(self, key, curs=0, count=None):
         fieldvalue_d = dict()
 
         while True:
-            curs, _fieldvalue_d = _rconn.zscan(key, cursor=curs, count=count)
+            curs, _fieldvalue_d = self._rconn.zscan(key, cursor=curs, count=count)
             fieldvalue_d.update(_fieldvalue_d)
             if curs == 0:
                 break
 
         return fieldvalue_d
 
-    def zrange(self, _rconn, key,limit=10, desc=False, withscores=False, score_cast_func=float):
+    def zrange(self, key,limit=10, desc=False, withscores=False, score_cast_func=float):
         """
         ##暂不使用
         :param _rconn:
@@ -62,7 +62,7 @@ class RedisOperatorBase(object):
         """
         value_l = list()
         start = 0
-        num = _rconn.zcard(key)-1 ###999
+        num = self._rconn.zcard(key)-1 ###999
 
         while True:
             if num > limit:
@@ -70,7 +70,7 @@ class RedisOperatorBase(object):
             else:
                 end = -1
 
-            _value = _rconn.zrange(key ,start, end, desc=desc, withscores=withscores, score_cast_func=score_cast_func)
+            _value = self._rconn.zrange(key ,start, end, desc=desc, withscores=withscores, score_cast_func=score_cast_func)
             value_l = value_l + _value
 
             start = end + 1
@@ -80,22 +80,22 @@ class RedisOperatorBase(object):
 
         return value_l
 
-    def sscan(self, _rconn, key, curs=0, count=None):
+    def sscan(self, key, curs=0, count=None):
         value_l = list()
 
         while True:
-            curs, _value = _rconn.sscan(key, cursor=curs, count=count)
+            curs, _value = self._rconn.sscan(key, cursor=curs, count=count)
             value_l = value_l + _value
             if curs == 0:
                 break
 
         return value_l
 
-    def lrange(self, _rconn, key,limit=100):
+    def lrange(self, key,limit=100):
         value_l = list()
         start = 0
 
-        residue = _rconn.llen(key)-1 ###剩余数
+        residue = self._rconn.llen(key)-1 ###剩余数
 
         while True:
             if residue > limit:
@@ -103,7 +103,7 @@ class RedisOperatorBase(object):
             else:
                 end = -1
 
-            _value = _rconn.lrange(key ,start, end)
+            _value = self._rconn.lrange(key ,start, end)
             value_l = value_l + _value
 
             start = end + 1
@@ -114,29 +114,29 @@ class RedisOperatorBase(object):
 
         return value_l
 
-    def get(self, _rconn, key):
-        value =  _rconn.get(key)
+    def get(self, key):
+        value =  self._rconn.get(key)
         return value
 
-    def hmset(self, _rconn, key, mapping):
-        return  _rconn.hmset(key, mapping)
+    def hmset(self, key, mapping):
+        return  self._rconn.hmset(key, mapping)
 
-    def hset(self, _rconn, key, field, value):
-        return  _rconn.hset(key, field, value)
+    def hset(self, key, field, value):
+        return  self._rconn.hset(key, field, value)
 
-    def zadd(self, _rconn, key, mapping):
-        return  _rconn.zadd(key, mapping)
+    def zadd(self, key, mapping):
+        return  self._rconn.zadd(key, mapping)
 
 
 
-    def sadd(self, _rconn, key, value):
-        return  _rconn.sadd(key, *value)
+    def sadd(self, key, value):
+        return  self._rconn.sadd(key, *value)
 
-    def rpush(self, _rconn, key, value):
-        return  _rconn.rpush(key, *value)
+    def rpush(self, key, value):
+        return  self._rconn.rpush(key, *value)
 
-    def set(self, _rconn, key, value):
-        return  _rconn.set(key, value)
+    def set(self, key, value):
+        return  self._rconn.set(key, value)
 
-    def save(self, _rconn):
-        return _rconn.save()
+    def save(self):
+        return self._rconn.save()
