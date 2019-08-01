@@ -153,7 +153,7 @@ class RedisSyncForm(QtWidgets.QDialog, Ui_Form_redis_sync):
         elif self.s_type == "rdb":
             filename = self.lineEdit_rdb_path.text()
             gr.get_allvalues(filename)
-        self.pushButton_sync.setEnabled(False)
+        self.pushButton_getdata.setEnabled(False)
 
     def get_end(self,hash_keyvalue, zset_keyvalue, set_keyvalue, list_keyvalue, str_keyvalue):
         self.hash_keyvalue = hash_keyvalue

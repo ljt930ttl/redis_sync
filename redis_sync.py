@@ -9,7 +9,7 @@
 # @Function:
 from redis_operator_base import RedisOperatorBase
 import threading
-import time,sys
+import time
 # from redis_connection_base import RedisConnectionBase
 
 def get_time_stamp():
@@ -37,7 +37,8 @@ class RedisSync(object):
 
 
     def set_allvalues_concurrency(self, drconn, hash_keyvalue, zset_keyvalue, set_keyvalue, list_keyvalue, str_keyvalue, pipe=True):
-
+        msg = ("[%s]set redis data start\n") % (get_time_stamp())
+        self.callback_from.show_msg(msg)
         if hash_keyvalue:
             msg = ("[%s]set hash key\n")%(get_time_stamp())
             self.callback_from.show_msg(msg)

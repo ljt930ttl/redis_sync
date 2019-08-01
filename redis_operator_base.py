@@ -57,7 +57,7 @@ class RedisOperatorBase(object):
         :param limit:
         :param desc:
         :param withscores:
-        :param score_cast_func:
+        :param :score_cast_func
         :return:
         """
         value_l = list()

@@ -73,10 +73,12 @@ class GetRdb(object):
 
         callback = ParserRDBCallback()
         parser = RdbParser(callback)
-        self.callback_from.show_msg("[%s]start parse the rdb\n" % (get_time_stamp()))
+        self.callback_from.show_msg("[%s]parse the rdb start\n" % (get_time_stamp()))
         parser.parse(filename)
-        head_info, hash_keyvalue_l, zset_keyvalue_l, set_keyvalue_l, list_keyvalue_l, str_keyvalue_l = callback.get_values()
-        self.callback_from.show_msg(str(head_info))
+        head_info_l, hash_keyvalue_l, zset_keyvalue_l, set_keyvalue_l, list_keyvalue_l, str_keyvalue_l = callback.get_values()
+        head_info = "\n".join( str(head) for head in head_info_l)
+
+        self.callback_from.show_msg(head_info+"\n")
         self.callback_from.show_msg("[%s]end parse \n" % (get_time_stamp()))
 
         self.callback_from.get_end(hash_keyvalue_l, zset_keyvalue_l, set_keyvalue_l, list_keyvalue_l, str_keyvalue_l)
@@ -108,7 +110,7 @@ class GetRdb(object):
                 self.str_keyvalue_d[key] = vlaue
             else:
                 print("key type is None")
-        self.callback_from.show_msg("[%s]get value end\n"%(get_time_stamp()))
+        self.callback_from.show_msg("[%s]get data end\n"%(get_time_stamp()))
         self.callback_from.get_end(self.hash_keyvalue_d, self.zset_keyvalue_d, self.set_keyvalue_d, self.list_keyvalue_d, self.str_keyvalue_d)
 
 class ParserRDBCallback(RdbCallback):
@@ -158,6 +160,8 @@ class ParserRDBCallback(RdbCallback):
 if __name__ == '__main__':
     callback = ParserRDBCallback()
     parser = RdbParser(callback)
-    parser.parse('dump.rdb')
+    print("[%s]start"%(get_time_stamp()))
+    parser.parse('dump/dump.rdb')
     head_info,hash_keyvalue_l, zset_keyvalue_l, set_keyvalue_l, list_keyvalue_l, str_keyvalue_l =callback.get_values()
     print(head_info)
+    print("[%s]end" % (get_time_stamp()))
