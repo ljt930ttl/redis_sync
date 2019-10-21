@@ -25,12 +25,12 @@ class RedisConnectionBase(object):
             try:
                 self.m_rconn = redis.StrictRedis(**rarg_d)
                 self.m_rconn.ping()
-                _msg = "[info]redis client %s:%s is ok!!" % (
+                _msg = "[info]redis client %s:%s is ok!!\n" % (
                     rarg_d['host'], rarg_d['port'])
                 self.show_msg(_msg)
                 return True
             except Exception as e:
-                _msg = "[error]check redis %s:%s : %s" % (
+                _msg = "[error]check redis %s:%s : %s\n" % (
                     rarg_d['host'], rarg_d['port'], e)
                 self.show_msg(_msg)
                 return False
@@ -39,12 +39,12 @@ class RedisConnectionBase(object):
                 self.m_rconn = redis.StrictRedis(
                     connection_pool=connection_pool)
                 self.m_rconn.ping()
-                _msg = "[info]redis client %s:%s is ok!!" % (
+                _msg = "[info]Connecting to redis was successful[%s:%s]\n" % (
                     rarg_d['host'], rarg_d['port'])
                 self.show_msg(_msg)
                 return True
             except Exception as e:
-                _msg = "[error]check redis %s:%s : %s" % (
+                _msg = "[error]Connecting to redis was faile[%s:%s] : %s\n" % (
                     rarg_d['host'], rarg_d['port'], e)
                 self.show_msg(_msg)
                 return False

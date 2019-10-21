@@ -91,8 +91,8 @@ class RedisSyncForm(QtWidgets.QDialog, Ui_Form_redis_sync):
 
         if self.drconn :
 
-            msg = "Connecting to redis was successful:%s\n"%(dragr)
-            self.show_msg(msg)
+            # msg = "Connecting to redis was successful:%s\n"%(dragr)
+            # self.show_msg(msg)
             if self.s_type == "server":
                 self.conn_source_redis(rcb)
             else:
@@ -126,8 +126,8 @@ class RedisSyncForm(QtWidgets.QDialog, Ui_Form_redis_sync):
         self.srconn = rcb.get_conn(sragr)
 
         if self.srconn:
-            msg = "Connecting to redis was successful:%s\n" % (sragr)
-            self.show_msg(msg)
+            # msg = "Connecting to redis was successful:%s\n" % (sragr)
+            # self.show_msg(msg)
             self.pushButton_conn.setText("disconnection")
 
             self.pushButton_getdata.setEnabled(True)
@@ -153,7 +153,7 @@ class RedisSyncForm(QtWidgets.QDialog, Ui_Form_redis_sync):
         elif self.s_type == "rdb":
             filename = self.lineEdit_rdb_path.text()
             gr.get_allvalues(filename)
-        self.pushButton_sync.setEnabled(False)
+        self.pushButton_getdata.setEnabled(False)
 
     def get_end(self,hash_keyvalue, zset_keyvalue, set_keyvalue, list_keyvalue, str_keyvalue):
         self.hash_keyvalue = hash_keyvalue
