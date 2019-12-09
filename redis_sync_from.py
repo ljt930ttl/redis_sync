@@ -26,6 +26,8 @@ class RedisSyncForm(QtWidgets.QDialog, Ui_Form_redis_sync):
         self.s_type = "server"
         self.drconn = None
         self.srconn = None
+        self._keyvalue = None
+
         pass
     def init_widgets(self):
         self.pushButton_sync.setEnabled(False)
@@ -139,11 +141,13 @@ class RedisSyncForm(QtWidgets.QDialog, Ui_Form_redis_sync):
 
     def sync_data(self):
         rs = RedisSync(self,self.s_type)
-        rs.set_allvalues(self.drconn, self.hash_keyvalue, self.zset_keyvalue, self.set_keyvalue, self.list_keyvalue,
-                         self.str_keyvalue)
         self.pushButton_conn.setEnabled(False)
         self.pushButton_getdata.setEnabled(False)
         self.pushButton_sync.setEnabled(False)
+        if self._keyvalue is  None:
+            self.sync_end()
+            return
+        rs.set_allvalues(self.drconn, self._keyvalue)
 
     def get_data(self):
 
@@ -155,16 +159,19 @@ class RedisSyncForm(QtWidgets.QDialog, Ui_Form_redis_sync):
             gr.get_allvalues(filename)
         self.pushButton_getdata.setEnabled(False)
 
-    def get_end(self,hash_keyvalue, zset_keyvalue, set_keyvalue, list_keyvalue, str_keyvalue):
-        self.hash_keyvalue = hash_keyvalue
-        self.zset_keyvalue = zset_keyvalue
-        self.set_keyvalue = set_keyvalue
-        self.list_keyvalue = list_keyvalue
-        self.str_keyvalue = str_keyvalue
+    def get_end(self,value):
+        self._keyvalue = value
+        # self.hash_keyvalue = hash_keyvalue
+        # self.zset_keyvalue = zset_keyvalue
+        # self.set_keyvalue = set_keyvalue
+        # self.list_keyvalue = list_keyvalue
+        # self.str_keyvalue = str_keyvalue
 
         self.pushButton_sync.setEnabled(True)
 
     def sync_end(self):
+
+
         self.pushButton_conn.setEnabled(True)
         self.pushButton_conn.setText("connection")
         if self.drconn :

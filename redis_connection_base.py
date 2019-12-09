@@ -23,7 +23,7 @@ class RedisConnectionBase(object):
         """
         if connection_pool is None:
             try:
-                self.m_rconn = redis.StrictRedis(**rarg_d)
+                self.m_rconn = redis.StrictRedis(socket_timeout=200,**rarg_d)
                 self.m_rconn.ping()
                 _msg = "[info]redis client %s:%s is ok!!\n" % (
                     rarg_d['host'], rarg_d['port'])
