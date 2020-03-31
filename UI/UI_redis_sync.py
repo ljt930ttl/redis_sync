@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'redis_sync.ui'
+# Form implementation generated from reading ui file 'UI_redis_sync.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_Form_redis_sync(object):
     def setupUi(self, Form_redis_sync):
@@ -93,13 +95,13 @@ class Ui_Form_redis_sync(object):
         self.pushButton_conn = QtWidgets.QPushButton(Form_redis_sync)
         self.pushButton_conn.setObjectName("pushButton_conn")
         self.verticalLayout_5.addWidget(self.pushButton_conn)
-        self.pushButton_getdata = QtWidgets.QPushButton(Form_redis_sync)
-        self.pushButton_getdata.setObjectName("pushButton_getdata")
-        self.verticalLayout_5.addWidget(self.pushButton_getdata)
         self.pushButton_sync = QtWidgets.QPushButton(Form_redis_sync)
         self.pushButton_sync.setMaximumSize(QtCore.QSize(100, 16777215))
         self.pushButton_sync.setObjectName("pushButton_sync")
         self.verticalLayout_5.addWidget(self.pushButton_sync)
+        self.checkBox_isPipe = QtWidgets.QCheckBox(Form_redis_sync)
+        self.checkBox_isPipe.setObjectName("checkBox_isPipe")
+        self.verticalLayout_5.addWidget(self.checkBox_isPipe)
         self.horizontalLayout_8.addLayout(self.verticalLayout_5)
         self.verticalLayout_6.addLayout(self.horizontalLayout_8)
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
@@ -137,8 +139,7 @@ class Ui_Form_redis_sync(object):
         self.lineEdit_destination_port.setText(_translate("Form_redis_sync", "6379"))
         self.label_6.setText(_translate("Form_redis_sync", "auth"))
         self.pushButton_conn.setText(_translate("Form_redis_sync", "connection"))
-        self.pushButton_getdata.setText(_translate("Form_redis_sync", "getdata"))
         self.pushButton_sync.setText(_translate("Form_redis_sync", "sync"))
+        self.checkBox_isPipe.setText(_translate("Form_redis_sync", "isPipe"))
         self.pushButton_open.setText(_translate("Form_redis_sync", "open"))
         self.checkBox_isrdb.setText(_translate("Form_redis_sync", "isFromRDB"))
-

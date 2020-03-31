@@ -9,11 +9,18 @@
 # @Function:
 
 class RedisOperatorBase(object):
-    def __init__(self,_rconn):
-        self._rconn =_rconn
+    def __init__(self, _rconn, ispipe=False):
+        self._rconn = _rconn
+        self.ispipe = ispipe
         pass
-    def get_type(self, key):
+
+
+    def set_conn(self, conn):
+        self._rconn = conn
+
+    def type(self, key):
         return self._rconn.type(key)
+
     def scan(self, curs=0):
         """
 
@@ -28,6 +35,7 @@ class RedisOperatorBase(object):
             if curs == 0:
                 break
         return keys
+
     def hscan(self, key, curs=0, count=None):
         fieldvalue_d = dict()
 
@@ -38,47 +46,6 @@ class RedisOperatorBase(object):
                 break
 
         return fieldvalue_d
-    def zscan(self, key, curs=0, count=None):
-        fieldvalue_d = dict()
-
-        while True:
-            curs, _fieldvalue_d = self._rconn.zscan(key, cursor=curs, count=count)
-            fieldvalue_d.update(_fieldvalue_d)
-            if curs == 0:
-                break
-
-        return fieldvalue_d
-
-    def zrange(self, key,limit=10, desc=False, withscores=False, score_cast_func=float):
-        """
-        ##暂不使用
-        :param _rconn:
-        :param key:
-        :param limit:
-        :param desc:
-        :param withscores:
-        :param :score_cast_func
-        :return:
-        """
-        value_l = list()
-        start = 0
-        num = self._rconn.zcard(key)-1 ###999
-
-        while True:
-            if num > limit:
-                end = start+limit
-            else:
-                end = -1
-
-            _value = self._rconn.zrange(key ,start, end, desc=desc, withscores=withscores, score_cast_func=score_cast_func)
-            value_l = value_l + _value
-
-            start = end + 1
-            num -= limit + 1
-            if num < 0:
-                break
-
-        return value_l
 
     def sscan(self, key, curs=0, count=None):
         value_l = list()
@@ -91,52 +58,126 @@ class RedisOperatorBase(object):
 
         return value_l
 
-    def lrange(self, key,limit=100):
-        value_l = list()
-        start = 0
+    ## string read all
+    def get(self, key):
+        return self._rconn.get(key)
 
-        residue = self._rconn.llen(key)-1 ###剩余数
+    def set(self, key, value):
+        return self._rconn.set(key, value)
+
+    ## list read all
+    def rpush(self, key, *value):
+        return self._rconn.rpush(key, *value)
+
+    def lrange(self, key, start, end, limit=1000):
+        value_l = list()
+        start = start
+
+        residue = self._rconn.llen(key) - 1  ###剩余数
 
         while True:
             if residue > limit:
-                end = start+limit
+                end = start + limit
             else:
-                end = -1
+                end = end
 
-            _value = self._rconn.lrange(key ,start, end)
+            _value = self._rconn.lrange(key, start, end)
             value_l = value_l + _value
 
             start = end + 1
-            residue -= limit +1
-            print("residue",residue)
+            residue -= limit + 1
+            # print("residue", residue)
             if residue < 0:
                 break
 
         return value_l
 
-    def get(self, key):
-        value =  self._rconn.get(key)
-        return value
+    ## set
+    def smembers(self, key):
+        return self._rconn.smembers(key)
 
-    def hmset(self, key, mapping):
-        return  self._rconn.hmset(key, mapping)
+    def sadd(self, key, *value):
+        return self._rconn.sadd(key, *value)
 
-    def hset(self, key, field, value):
-        return  self._rconn.hset(key, field, value)
+    ## zset read all
+    def zscan(self, key, curs=0, count=None):
+
+        fieldvalue_d = dict()
+        while True:
+            curs, _fieldvalue_d = self._rconn.zscan(key, cursor=curs, count=count)
+            fieldvalue_d.update(_fieldvalue_d)
+            if curs == 0:
+                break
+        return fieldvalue_d
+
+    def zrange(self, key, start=0, end=-1, desc=False, withscores=False, limit=10000):
+        """
+        :param _rconn:
+        :param key:
+        :param limit:
+        :param desc:
+        :param withscores:
+        :param :score_cast_func
+        :return:
+        """
+        value_l = list()
+        start = start
+        num = self._rconn.zcard(key) - 1  ###999
+
+        while True:
+            if num > limit:
+                end = start + limit
+            else:
+                end = end
+
+            _value = self._rconn.zrange(key, start, end, desc=desc, withscores=withscores, )
+            value_l = value_l + _value
+
+            start = end + 1
+            num -= limit + 1
+            if num < 0:
+                break
+
+        return value_l
 
     def zadd(self, key, mapping):
-        return  self._rconn.zadd(key, mapping)
+        return self._rconn.zadd(key, mapping)
 
+    ## hash read all
+    def hgetall(self, key):
+        # print(self._rconn)
+        return self._rconn.hgetall(key)
+        # print(rs)
+        # return rs
 
+    def hmset(self, key, mapping):
+        try:
+            rs = self._rconn.hmset(key, mapping)
+        except:
+            print(key, mapping)
+            raise
+        return rs
 
-    def sadd(self, key, value):
-        return  self._rconn.sadd(key, *value)
-
-    def rpush(self, key, value):
-        return  self._rconn.rpush(key, *value)
-
-    def set(self, key, value):
-        return  self._rconn.set(key, value)
+    def hset(self, key, field, value):
+        return self._rconn.hset(key, field, value)
 
     def save(self):
         return self._rconn.save()
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == '__main__':
+
+    rarg_d = {
+        "host": "127.0.0.1",
+        "port": 6379
+    }
+

@@ -22,16 +22,7 @@
         <string>source</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
-        <property name="leftMargin">
-         <number>1</number>
-        </property>
-        <property name="topMargin">
-         <number>1</number>
-        </property>
-        <property name="rightMargin">
-         <number>1</number>
-        </property>
-        <property name="bottomMargin">
+        <property name="margin">
          <number>1</number>
         </property>
         <item>
@@ -97,16 +88,7 @@
         <string>destination</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
-        <property name="leftMargin">
-         <number>1</number>
-        </property>
-        <property name="topMargin">
-         <number>1</number>
-        </property>
-        <property name="rightMargin">
-         <number>1</number>
-        </property>
-        <property name="bottomMargin">
+        <property name="margin">
          <number>1</number>
         </property>
         <item>
@@ -176,13 +158,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_getdata">
-         <property name="text">
-          <string>getdata</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QPushButton" name="pushButton_sync">
          <property name="maximumSize">
           <size>
@@ -192,6 +167,13 @@
          </property>
          <property name="text">
           <string>sync</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_isPipe">
+         <property name="text">
+          <string>isPipe</string>
          </property>
         </widget>
        </item>

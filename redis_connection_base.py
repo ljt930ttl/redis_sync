@@ -10,7 +10,6 @@
 
 import redis
 
-
 class RedisConnectionBase(object):
     def __init__(self):
         self.m_rconn = None
@@ -23,7 +22,7 @@ class RedisConnectionBase(object):
         """
         if connection_pool is None:
             try:
-                self.m_rconn = redis.StrictRedis(socket_timeout=200,**rarg_d)
+                self.m_rconn = redis.Redis(socket_timeout=200,**rarg_d)
                 self.m_rconn.ping()
                 _msg = "[info]redis client %s:%s is ok!!\n" % (
                     rarg_d['host'], rarg_d['port'])
@@ -36,7 +35,7 @@ class RedisConnectionBase(object):
                 return False
         else:
             try:
-                self.m_rconn = redis.StrictRedis(
+                self.m_rconn = redis.Redis(
                     connection_pool=connection_pool)
                 self.m_rconn.ping()
                 _msg = "[info]Connecting to redis was successful[%s:%s]\n" % (
